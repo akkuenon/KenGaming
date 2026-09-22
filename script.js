@@ -74,7 +74,55 @@ function miniGameMarkup(key) {
     'mini-memory': `<style>${miniStyles}</style><main class="mini memory"><h1>MEMORY GRID</h1><p>Find the matching pairs.</p><div id="grid" class="memory-grid"></div><b id="memoryStatus"></b></main>`,
     'mini-dodge': `<style>${miniStyles}</style><main class="mini dodge"><h1>NEON DODGE</h1><p>Move with ← → or A / D. Score: <b id="dodgeScore">0</b></p><div id="arena"><div id="player"></div></div><button id="startDodge">START</button></main>`,
     'mini-reaction': `<style>${miniStyles}</style><main class="mini reaction"><h1>QUICK REFLEX</h1><p id="reactionStatus">Wait for green, then click.</p><button id="reactionButton">WAIT</button></main>`,
-    'csharp-terminal': `<style>${miniStyles} .mini.terminal{display:flex;flex-direction:column;gap:12px;padding:18px;background:#0b1020;color:#d9faff;min-height:100vh}.terminal-bar{display:flex;justify-content:space-between;align-items:center;background:#141a2b;border:1px solid #3ad6ff;border-radius:10px;padding:10px 12px;font:600 12px/1.2 'Segoe UI',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#8fe9ff}.terminal-screen{flex:1;display:flex;flex-direction:column;gap:8px;background:#070d18;border:1px solid #1d2a3f;border-radius:10px;padding:14px;overflow:auto;font:14px/1.5 'Consolas','SFMono-Regular',monospace}.terminal-output{display:flex;flex-direction:column;gap:6px;white-space:pre-wrap}.terminal-line{color:#d5f3ff}.terminal-prompt{color:#60f0a3}.terminal-input-wrap{display:flex;align-items:center;gap:8px;background:#0d1423;border:1px solid #2d405d;border-radius:10px;padding:8px 10px}.terminal-input-wrap span{color:#60f0a3}.terminal-input-wrap input{flex:1;border:none;background:transparent;color:#e9fff8;font:14px/1.5 'Consolas','SFMono-Regular',monospace;outline:none}.terminal-input-wrap button{background:#2dd4bf;border:none;border-radius:8px;color:#041319;padding:8px 12px;font-weight:700;cursor:pointer}.terminal-tag{color:#ffd166}.terminal-error{color:#ff8686}.terminal-success{color:#8ef0b5}.terminal-help{color:#9fe7ff}</style><main class="mini terminal"><div class="terminal-bar"><span>KenGaming</span><span>C# // Sandbox</span></div><div class="terminal-screen"><div class="terminal-output" id="terminalOutput"><div class="terminal-line"><span class="terminal-prompt">kg@dev:~$</span> dotnet --version</div><div class="terminal-line"><span class="terminal-success">8.0.100</span></div><div class="terminal-line"><span class="terminal-help">Type <span class="terminal-tag">help</span> to see commands.</span></div></div><form id="terminalForm" class="terminal-input-wrap"><span class="terminal-prompt">kg@dev:~$</span><input id="terminalInput" autocomplete="off" spellcheck="false" aria-label="Terminal command" /><button type="submit">RUN</button></form></div></main>`
+    'csharp-terminal': `<style>
+      ${miniStyles}
+      .mini.terminal {
+        display:flex; flex-direction:column; gap:12px; min-height:100vh; padding:18px; background:#030712; color:#dff9ff; font-family:Consolas, 'SFMono-Regular', monospace;
+      }
+      .terminal-shell {
+        display:flex; flex-direction:column; background:#0b1120; border:1px solid #1f2f46; border-radius:12px; box-shadow:0 0 24px rgba(34,211,238,.18); overflow:hidden;
+      }
+      .terminal-header {
+        display:flex; align-items:center; justify-content:space-between; background:#101a2d; border-bottom:1px solid #1a2d43; padding:10px 14px; font-size:11px; letter-spacing:.18em; color:#7dd3fc; text-transform:uppercase;
+      }
+      .window-controls { display:flex; gap:8px; }
+      .window-controls span { display:inline-block; width:12px; height:12px; border-radius:50%; }
+      .window-controls span:nth-child(1){ background:#ff5f57; } .window-controls span:nth-child(2){ background:#febc2e; } .window-controls span:nth-child(3){ background:#28c840; }
+      .terminal-body { display:flex; flex-direction:column; height:calc(100vh - 150px); min-height:420px; background:#020812; }
+      .terminal-output { flex:1; padding:18px 16px 12px; overflow:auto; white-space:pre-wrap; word-break:break-word; }
+      .terminal-line { color:#e2f5ff; line-height:1.5; }
+      .terminal-prompt { color:#6ee7b7; }
+      .terminal-command { color:#c4b5fd; }
+      .terminal-success { color:#86efac; }
+      .terminal-warning { color:#fbbf24; }
+      .terminal-error { color:#fca5a5; }
+      .terminal-input-row { display:flex; align-items:center; gap:10px; padding:12px 14px 16px; border-top:1px solid #19263d; background:#0a1220; }
+      .terminal-input-row .prompt { color:#67e8f9; }
+      .terminal-input-row input {
+        flex:1; border:none; background:transparent; color:#eff6ff; font-size:15px; font-family:Consolas, 'SFMono-Regular', monospace; outline:none;
+      }
+      .terminal-input-row button {
+        background:#0ea5e9; color:white; border:none; border-radius:8px; padding:8px 12px; font-family:inherit; font-weight:700; cursor:pointer;
+      }
+      .terminal-help { color:#93c5fd; }
+    </style>
+    <main class="mini terminal">
+      <div class="terminal-shell">
+        <div class="terminal-header">
+          <div class="window-controls"><span></span><span></span><span></span></div>
+          <span>KenGaming // C# Shell</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-output" id="terminalOutput"></div>
+          <form class="terminal-input-row" id="terminalForm">
+            <span class="prompt">kg@dev:~$</span>
+            <input id="terminalInput" autocomplete="off" spellcheck="false" aria-label="Terminal command" />
+            <button type="submit">RUN</button>
+          </form>
+        </div>
+      </div>
+    </main>
+    `,
   };
   return games[key] || '';
 }
@@ -168,43 +216,171 @@ function setupMiniGame(key) {
     const output = doc.getElementById('terminalOutput');
     const form = doc.getElementById('terminalForm');
     const input = doc.getElementById('terminalInput');
-    const append = (message, className = 'terminal-line') => {
-      const line = doc.createElement('div');
-      line.className = className;
-      line.textContent = message;
-      output.appendChild(line);
-      output.scrollTop = output.scrollHeight;
-    };
-    const commands = {
-      help: () => {
-        append('Available commands: help, ls, pwd, echo, build, run, clear');
-      },
-      ls: () => append('app/  bin/  obj/  README.md'),
-      pwd: () => append('/workspace/KenGaming'),
-      echo: args => append(args.length ? args.join(' ') : ''),
-      build: () => append('dotnet build complete. 0 warnings, 0 errors.'),
-      run: () => append('Starting KenGaming terminal... ready.'),
-      clear: () => {
-        output.innerHTML = '';
-        append('Terminal cleared.');
+
+    const fs = {
+      '/workspace/KenGaming': {
+        'README.md': 'KenGaming terminal sandbox\nType "help" to inspect the available commands.',
+        'src': {
+          'Program.cs': 'using System;\nConsole.WriteLine("Hello from KenGaming!");',
+          'Game.cs': 'public class Game { public static void Run() => Console.WriteLine("Arcade online"); }'
+        },
+        'bin': {},
+        'obj': {},
+        'notes.txt': 'Built with C# and a retro arcade shell.'
       }
     };
-    form.addEventListener('submit', event => {
+
+    const state = {
+      cwd: '/workspace/KenGaming',
+      history: [],
+      historyIndex: -1
+    };
+
+    function normalizePath(rawPath) {
+      const value = rawPath && rawPath.trim() ? rawPath.trim() : '.';
+      if (value === '.') return state.cwd;
+      if (value === '~') return '/workspace/KenGaming';
+      if (value.startsWith('/')) return value;
+      return `${state.cwd.replace(/\/$/, '')}/${value}`;
+    }
+
+    function ensureDirectory(path) {
+      const segments = path.split('/').filter(Boolean);
+      let current = '/';
+      segments.forEach(segment => {
+        current = `${current.replace(/\/$/, '')}/${segment}`;
+        if (!fs[current]) fs[current] = {};
+      });
+      return current;
+    }
+
+    function resolvePath(pathValue) {
+      const resolved = normalizePath(pathValue);
+      const parts = resolved.split('/').filter(Boolean);
+      let current = '/';
+      for (const part of parts) {
+        current = `${current.replace(/\/$/, '')}/${part}`;
+        if (!fs[current]) return null;
+      }
+      return current;
+    }
+
+    function append(msg, className = 'terminal-line') {
+      const line = doc.createElement('div');
+      line.className = className;
+      line.textContent = msg;
+      output.appendChild(line);
+      output.scrollTop = output.scrollHeight;
+    }
+
+    function promptLine() {
+      const name = 'kg@dev';
+      append(`${name}:${state.cwd}$`, 'terminal-prompt');
+    }
+
+    function ls(pathValue = state.cwd) {
+      const target = resolvePath(pathValue) || state.cwd;
+      const entries = Object.keys(fs[target] || {});
+      if (!entries.length) {
+        return '';
+      }
+      return entries.join('   ');
+    }
+
+    function cat(pathValue) {
+      const target = resolvePath(pathValue);
+      if (!target) return 'cat: file not found';
+      const pathParts = target.split('/').filter(Boolean);
+      const name = pathParts[pathParts.length - 1];
+      const parent = target.split('/').slice(0, -1).join('/') || '/';
+      const parentMap = fs[parent] || {};
+      if (Object.prototype.hasOwnProperty.call(parentMap, name)) {
+        return parentMap[name];
+      }
+      return `cat: ${pathValue}: No such file`;
+    }
+
+    function runCommand(raw) {
+      const trimmed = raw.trim();
+      if (!trimmed) return;
+      append(`${trimmed}`, 'terminal-command');
+      const [command, ...args] = trimmed.split(/\s+/);
+
+      switch (command.toLowerCase()) {
+        case 'help':
+          append('Available commands: help, ls, cd, pwd, cat, echo, whoami, date, clear, exit, dotnet, uname, repo');
+          break;
+        case 'ls':
+          append(ls(args[0] || state.cwd) || '');
+          break;
+        case 'pwd':
+          append(state.cwd);
+          break;
+        case 'cd': {
+          const next = normalizePath(args[0] || '/workspace/KenGaming');
+          const resolved = resolvePath(next);
+          if (!resolved || !fs[resolved] || typeof fs[resolved] !== 'object') {
+            append(`cd: ${args[0] || '~'}: No such file or directory`, 'terminal-error');
+          } else {
+            state.cwd = resolved;
+          }
+          break;
+        }
+        case 'cat':
+          if (!args[0]) {
+            append('cat: missing file operand', 'terminal-error');
+          } else {
+            append(cat(args[0]));
+          }
+          break;
+        case 'echo':
+          append(args.join(' ') || '');
+          break;
+        case 'whoami':
+          append('ken');
+          break;
+        case 'date':
+          append(new Date().toString());
+          break;
+        case 'clear':
+          output.innerHTML = '';
+          break;
+        case 'exit':
+          append('Session closed.');
+          input.value = '';
+          input.disabled = true;
+          form.querySelector('button').disabled = true;
+          break;
+        case 'dotnet':
+          append('dotnet 8.0.100', 'terminal-success');
+          break;
+        case 'uname':
+          append('Linux dev-box 6.6.0-x86_64', 'terminal-success');
+          break;
+        case 'repo':
+          append('KenGaming :: online arcade and terminal sandbox', 'terminal-success');
+          break;
+        default:
+          append(`Command not found: ${command}. Try 'help'.`, 'terminal-error');
+      }
+      if (command.toLowerCase() !== 'clear') {
+        state.history.push(trimmed);
+      }
+      input.value = '';
+      input.focus();
+    }
+
+    append('Welcome to the KenGaming C# shell.', 'terminal-success');
+    append('Type "help" to see commands.', 'terminal-warning');
+    append('');
+
+    form.addEventListener('submit', (event) => {
       event.preventDefault();
       const raw = input.value.trim();
       if (!raw) return;
-      append(`kg@dev:~$ ${raw}`);
-      const [command, ...args] = raw.split(/\s+/);
-      if (command === 'clear') {
-        output.innerHTML = '';
-        append('Terminal cleared.');
-      } else if (commands[command]) {
-        commands[command](args);
-      } else {
-        append(`Unknown command: ${command}. Try help.`, 'terminal-error');
-      }
-      input.value = '';
+      runCommand(raw);
     });
+
     input.focus();
   }
 }
