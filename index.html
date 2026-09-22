@@ -1,10 +1,86 @@
-    <section class="hero">
-      <div>
-        <p class="eyebrow">YOUR POCKET ARCADE</p>
-        <h1>Play something<br /><em>legendary.</em></h1>
-        <p class="intro">Pick a game below and jump straight into the action. No downloads, no distractions.</p>
-        <button id="openTerminalButton" type="button" style="margin-top:18px; border:none; border-radius:999px; background:linear-gradient(135deg,#22d3ee,#7c3aed); color:#fff; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:12px 18px; cursor:pointer;">Open C# Terminal</button>
-        <a href="code-terminal/terminal.html" style="display:inline-block;margin:18px 0 0 8px;color:#7dd3fc;">Open terminal page ↗</a>
-      </div>
-      <div class="hero-orb"><span>INSERT<br />COIN</span><strong>∞</strong></div>
-    </section>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arcade — Play in Fullscreen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="topbar">
+        <a class="brand" href="#"><span class="brand-mark">✦</span> ARCADE</a>
+        <div class="status"><span class="pulse"></span> All systems online</div>
+        <button class="icon-button" id="fullscreenButton" type="button" aria-label="Toggle fullscreen">⛶</button>
+      </nav>
+
+      <section class="hero">
+        <div>
+          <p class="eyebrow">YOUR POCKET ARCADE</p>
+          <h1>Play something<br /><em>legendary.</em></h1>
+          <p class="intro">Pick a game below and jump straight into the action. No downloads, no distractions.</p>
+
+          <div class="hero-actions">
+            <button id="openTerminalButton" class="terminal-launch" type="button">Open C# Terminal</button>
+            <a class="terminal-link" href="code-terminal/terminal.html">Open terminal page ↗</a>
+          </div>
+        </div>
+
+        <div class="hero-orb"><span>INSERT<br />COIN</span><strong>∞</strong></div>
+      </section>
+
+      <section class="web-frame-tool" aria-label="Open a website inside the arcade">
+        <div>
+          <strong>WEB FRAME</strong>
+          <small>Enter a website address to open it in the game screen.</small>
+        </div>
+        <form id="webFrameForm" class="web-frame-form">
+          <label class="sr-only" for="webFrameUrl">Website URL</label>
+          <input id="webFrameUrl" type="text" inputmode="url" autocomplete="url" placeholder="https://example.com" />
+          <button type="submit">LOAD SITE</button>
+        </form>
+        <p id="webFrameMessage" class="web-frame-message" role="status"></p>
+      </section>
+
+      <section class="game-picker" aria-label="Choose a game">
+        <button class="game-button" data-game="mini-clicker"><span class="game-icon">✦</span><span><b>Neon Clicker</b><small>Built-in mini game</small></span><i>PLAY</i></button>
+        <button class="game-button" data-game="mini-memory"><span class="game-icon">▣</span><span><b>Memory Grid</b><small>Built-in mini game</small></span><i>PLAY</i></button>
+        <button class="game-button" data-game="mini-dodge"><span class="game-icon">◆</span><span><b>Neon Dodge</b><small>Built-in mini game</small></span><i>PLAY</i></button>
+        <button class="game-button" data-game="mini-reaction"><span class="game-icon">⚡</span><span><b>Quick Reflex</b><small>Built-in mini game</small></span><i>PLAY</i></button>
+        <button class="game-button active" data-game="csharp-terminal"><span class="game-icon">C#</span><span><b>C# Terminal</b><small>Code sandbox</small></span><i>RUN</i></button>
+        <button class="game-button" data-game="2048"><span class="game-icon">▦</span><span><b>2048</b><small>Number puzzle</small></span><i>01</i></button>
+        <button class="game-button" data-game="agar"><span class="game-icon">◉</span><span><b>Agar.io</b><small>Grow and survive</small></span><i>02</i></button>
+        <button class="game-button" data-game="slither"><span class="game-icon">≈</span><span><b>Slither.io</b><small>Snake battle</small></span><i>03</i></button>
+        <button class="game-button" data-game="tetris"><span class="game-icon">▰</span><span><b>Tetris</b><small>Stack attack</small></span><i>04</i></button>
+        <button class="game-button" data-game="chess"><span class="game-icon">♞</span><span><b>Chess</b><small>Classic strategy</small></span><i>05</i></button>
+      </section>
+
+      <section class="stage-wrap">
+        <div class="stage-heading">
+          <span>
+            <strong id="gameTitle">C# Terminal</strong>
+            <span class="dot">•</span>
+            <span id="gameType">Code sandbox</span>
+          </span>
+          <span class="controls-hint">CLICK FRAME TO FOCUS • F FOR FULLSCREEN</span>
+        </div>
+
+        <div class="stage" id="stage">
+          <iframe id="gameFrame" title="Arcade game" allow="fullscreen; autoplay; gamepad" allowfullscreen src="about:blank"></iframe>
+          <button class="stage-fullscreen" id="stageFullscreenButton" type="button" aria-label="Enter game fullscreen" title="Enter game fullscreen">⛶</button>
+          <div class="loading" id="loading">LOADING GAME<span>•••</span></div>
+        </div>
+      </section>
+
+      <footer>
+        <span>ARCADE / 2024</span>
+        <span>BUILT FOR BIG SCREENS <b>↗</b></span>
+      </footer>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
