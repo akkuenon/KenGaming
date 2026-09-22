@@ -15,7 +15,6 @@ const games = {
   'mini-memory': ['Memory Grid', 'Built-in mini game', 'mini-memory'],
   'mini-dodge': ['Neon Dodge', 'Built-in mini game', 'mini-dodge'],
   'mini-reaction': ['Quick Reflex', 'Built-in mini game', 'mini-reaction'],
-  'csharp-terminal': ['C# Terminal', 'Code sandbox', 'code-terminal/terminal.html'],
   '2048': ['2048', 'Number puzzle', 'https://play2048.co/'],
   agar: ['Agar.io', 'Grow and survive', 'https://agar.io/'],
   slither: ['Slither.io', 'Snake battle', 'https://slither.io/'],
