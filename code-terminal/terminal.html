@@ -230,6 +230,15 @@
         output.scrollTop = output.scrollHeight;
       };
 
+      const goToArcade = () => {
+        const arcadeUrl = '../index.html';
+        if (window.self !== window.top) {
+          window.top.location.href = arcadeUrl;
+          return;
+        }
+        window.location.href = arcadeUrl;
+      };
+
       const banner = [
         'KenGaming HTML Terminal',
         'Type "help" to see commands.',
@@ -266,7 +275,7 @@
         open: (arg) => {
           const value = (arg || '').toLowerCase();
           if (value === 'arcade') {
-            window.location.href = '../index.html';
+            goToArcade();
             return 'Opening arcade...';
           }
           if (value === 'terminal') {
@@ -310,9 +319,7 @@
         input.focus();
       });
 
-      backButton.addEventListener('click', () => {
-        window.location.href = '../index.html';
-      });
+      backButton.addEventListener('click', goToArcade);
 
       fullscreenButton.addEventListener('click', async () => {
         try {
