@@ -24,8 +24,8 @@
           <p class="intro">Pick a game below and jump straight into the action. No downloads, no distractions.</p>
 
           <div class="hero-actions">
-            <button id="openTerminalButton" class="terminal-launch" type="button">Open C# Terminal</button>
-            <a class="terminal-link" href="code-terminal/terminal.html">Open terminal page ↗</a>
+            <button id="openTerminalButton" class="terminal-launch" type="button" disabled aria-disabled="true" title="Terminal under maintenance">Terminal — Under Maintenance</button>
+            <span class="terminal-link" aria-disabled="true">Terminal temporarily unavailable</span>
           </div>
         </div>
 
@@ -50,8 +50,8 @@
         <button class="game-button" data-game="mini-memory"><span class="game-icon">▣</span><span><b>Memory Grid</b><small>Built-in mini game</small></span><i>PLAY</i></button>
         <button class="game-button" data-game="mini-dodge"><span class="game-icon">◆</span><span><b>Neon Dodge</b><small>Built-in mini game</small></span><i>PLAY</i></button>
         <button class="game-button" data-game="mini-reaction"><span class="game-icon">⚡</span><span><b>Quick Reflex</b><small>Built-in mini game</small></span><i>PLAY</i></button>
-        <button class="game-button active" data-game="csharp-terminal"><span class="game-icon">C#</span><span><b>C# Terminal</b><small>Code sandbox</small></span><i>RUN</i></button>
-        <button class="game-button" data-game="2048"><span class="game-icon">▦</span><span><b>2048</b><small>Number puzzle</small></span><i>01</i></button>
+        <button class="game-button terminal-disabled" data-game="csharp-terminal" disabled aria-disabled="true" title="Terminal under maintenance"><span class="game-icon">C#</span><span><b>C# Terminal</b><small>Under maintenance</small></span><i>OFFLINE</i></button>
+        <button class="game-button active" data-game="2048"><span class="game-icon">▦</span><span><b>2048</b><small>Number puzzle</small></span><i>01</i></button>
         <button class="game-button" data-game="agar"><span class="game-icon">◉</span><span><b>Agar.io</b><small>Grow and survive</small></span><i>02</i></button>
         <button class="game-button" data-game="slither"><span class="game-icon">≈</span><span><b>Slither.io</b><small>Snake battle</small></span><i>03</i></button>
         <button class="game-button" data-game="tetris"><span class="game-icon">▰</span><span><b>Tetris</b><small>Stack attack</small></span><i>04</i></button>
@@ -61,9 +61,9 @@
       <section class="stage-wrap">
         <div class="stage-heading">
           <span>
-            <strong id="gameTitle">C# Terminal</strong>
+            <strong id="gameTitle">2048</strong>
             <span class="dot">•</span>
-            <span id="gameType">Code sandbox</span>
+            <span id="gameType">Number puzzle</span>
           </span>
           <span class="controls-hint">CLICK FRAME TO FOCUS • F FOR FULLSCREEN</span>
         </div>
