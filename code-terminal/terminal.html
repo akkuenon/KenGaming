@@ -3,111 +3,27 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>KenGaming HTML Terminal</title>
+    <title>KenGaming Terminal — Under Maintenance</title>
     <style>
-      :root { color-scheme: dark; font-family: Consolas, "SFMono-Regular", Menlo, monospace; }
+      :root { color-scheme: dark; font-family: "DM Sans", Arial, sans-serif; }
       * { box-sizing: border-box; }
-      body { margin: 0; min-height: 100vh; background: #020817; color: #e2f5ff; }
-      .terminal-shell { min-height: 100vh; display: flex; flex-direction: column; background: #07111f; }
-      .terminal-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 16px; border-bottom: 1px solid #1f405b; background: #0d1b2f; }
-      .title { color: #22d3ee; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
-      .actions { display: flex; gap: 10px; }
-      button { border: 1px solid #38bdf8; border-radius: 8px; padding: 8px 11px; color: #e0f2fe; background: #0c4a6e; font: inherit; cursor: pointer; }
-      button:hover { background: #075985; }
-      #output { flex: 1; overflow: auto; padding: 20px; white-space: pre-wrap; line-height: 1.55; }
-      .line { margin: 0 0 7px; }
-      .ok { color: #86efac; }
-      .error { color: #fca5a5; }
-      .cmd { color: #67e8f9; }
-      form { display: flex; gap: 10px; padding: 14px 16px 18px; border-top: 1px solid #1f405b; background: #0a1728; }
-      label { color: #6ee7b7; white-space: nowrap; }
-      input { min-width: 0; flex: 1; border: 0; outline: 0; color: #f8fafc; background: transparent; font: inherit; }
-      @media (max-width: 640px) { .terminal-bar { flex-wrap: wrap; } }
+      body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at top, #172554, #020617 65%); color: #e2e8f0; }
+      .maintenance { width: min(620px, 100%); padding: 42px 32px; text-align: center; border: 1px solid rgba(148, 163, 184, .22); border-radius: 22px; background: rgba(15, 23, 42, .86); box-shadow: 0 24px 70px rgba(0, 0, 0, .35); }
+      .icon { display: grid; place-items: center; width: 72px; height: 72px; margin: 0 auto 22px; border-radius: 20px; background: linear-gradient(135deg, #22d3ee, #7c3aed); color: white; font: 700 25px Consolas, monospace; }
+      h1 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.7rem); letter-spacing: -.04em; }
+      p { margin: 16px auto 26px; max-width: 480px; color: #a5b4fc; line-height: 1.65; }
+      a { display: inline-block; border-radius: 10px; padding: 12px 18px; background: #22d3ee; color: #082f49; font-weight: 700; text-decoration: none; }
+      a:hover { background: #67e8f9; }
+      .status { display: inline-block; margin-top: 20px; color: #fbbf24; font: 700 12px Consolas, monospace; letter-spacing: .12em; text-transform: uppercase; }
     </style>
   </head>
   <body>
-    <main class="terminal-shell" id="terminalWindow">
-      <header class="terminal-bar">
-        <span class="title">KenGaming // HTML Terminal</span>
-        <div class="actions">
-          <button id="backButton" type="button">BACK TO ARCADE</button>
-          <button id="fullscreenButton" type="button">FULLSCREEN</button>
-        </div>
-      </header>
-      <div id="output" aria-live="polite"></div>
-      <form id="commandForm" autocomplete="off">
-        <label for="command">kg@dev:~$</label>
-        <input id="command" type="text" spellcheck="false" autofocus />
-        <button type="submit">RUN</button>
-      </form>
+    <main class="maintenance" aria-labelledby="maintenance-title">
+      <div class="icon" aria-hidden="true">C#</div>
+      <h1 id="maintenance-title">Terminal under maintenance</h1>
+      <p>The KenGaming terminal is temporarily unavailable while we work on improvements. Please return to the arcade and try again later.</p>
+      <a href="../index.html?view=arcade#arcade">Back to Arcade</a>
+      <div class="status">Temporarily offline</div>
     </main>
-
-    <script>
-      const output = document.getElementById('output');
-      const input = document.getElementById('command');
-      const form = document.getElementById('commandForm');
-      const terminalWindow = document.getElementById('terminalWindow');
-      const fullscreenButton = document.getElementById('fullscreenButton');
-
-      const print = (text, className = '') => {
-        const line = document.createElement('div');
-        line.className = `line ${className}`;
-        line.textContent = text;
-        output.appendChild(line);
-        output.scrollTop = output.scrollHeight;
-      };
-
-      // Resolve from this terminal document, not from the parent iframe URL.
-      // This prevents ../index.html from being resolved back to the terminal.
-      const arcadeUrl = new URL('../index.html?view=arcade#arcade', document.baseURI).href;
-      const goToArcade = () => {
-        if (window.top !== window.self) {
-          window.top.location.replace(arcadeUrl);
-        } else {
-          window.location.replace(arcadeUrl);
-        }
-      };
-
-      print('KenGaming HTML Terminal ready.', 'ok');
-      print('Type "help" for commands or use BACK TO ARCADE.');
-
-      const commands = {
-        help: () => 'help  clear  ls  pwd  whoami  date  echo <text>  open arcade  exit',
-        clear: () => { output.replaceChildren(); return ''; },
-        ls: () => 'arcade/   games/   terminal/   docs/',
-        pwd: () => '/workspace/ken-gaming',
-        whoami: () => 'ken',
-        date: () => new Date().toString(),
-        exit: () => 'Use BACK TO ARCADE or type open arcade to leave the terminal.',
-        open: (value) => value.toLowerCase() === 'arcade' ? (goToArcade(), 'Opening arcade...') : 'Usage: open arcade'
-      };
-
-      form.addEventListener('submit', event => {
-        event.preventDefault();
-        const raw = input.value.trim();
-        if (!raw) return;
-        print(`kg@dev:~$ ${raw}`, 'cmd');
-        const [name, ...args] = raw.split(/\s+/);
-        let result;
-        if (name === 'echo') result = args.join(' ');
-        else if (name === 'dotnet' && args.join(' ') === '--version') result = '8.0.100';
-        else if (commands[name]) result = commands[name](args.join(' '));
-        else result = `bash: ${name}: command not found`;
-        if (result) print(result, result.startsWith('bash:') ? 'error' : 'ok');
-        input.value = '';
-        input.focus();
-      });
-
-      document.getElementById('backButton').addEventListener('click', goToArcade);
-      fullscreenButton.addEventListener('click', async () => {
-        try {
-          if (document.fullscreenElement) await document.exitFullscreen();
-          else await terminalWindow.requestFullscreen();
-        } catch { print('Fullscreen is not available in this browser.', 'error'); }
-      });
-      document.addEventListener('fullscreenchange', () => {
-        fullscreenButton.textContent = document.fullscreenElement ? 'EXIT FULLSCREEN' : 'FULLSCREEN';
-      });
-    </script>
   </body>
 </html>
