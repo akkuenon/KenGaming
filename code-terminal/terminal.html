@@ -5,212 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>KenGaming HTML Terminal</title>
     <style>
-      :root {
-        --bg: #020817;
-        --panel: #0b1220;
-        --panel-2: #101827;
-        --line: rgba(148, 163, 184, 0.18);
-        --text: #e2f5ff;
-        --muted: #94a3b8;
-        --green: #34d399;
-        --blue: #60a5fa;
-        --pink: #ff537f;
-        --cyan: #22d3ee;
-        --purple: #8b5cf6;
-        --yellow: #fbbf24;
-      }
-
+      :root { color-scheme: dark; font-family: Consolas, "SFMono-Regular", Menlo, monospace; }
       * { box-sizing: border-box; }
-
-      html, body {
-        margin: 0;
-        min-height: 100%;
-        background: radial-gradient(circle at top, #0f172a 0%, #020817 45%, #01060d 100%);
-        color: var(--text);
-        font-family: "Consolas", "SFMono-Regular", Menlo, Monaco, monospace;
-      }
-
-      body {
-        min-height: 100vh;
-        display: flex;
-        align-items: stretch;
-        justify-content: center;
-        padding: 18px;
-      }
-
-      .terminal-shell {
-        width: min(1200px, 100%);
-        min-height: calc(100vh - 36px);
-        display: flex;
-        flex-direction: column;
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        background: rgba(9, 15, 24, 0.88);
-        box-shadow: 0 30px 80px rgba(2, 8, 23, 0.85);
-        overflow: hidden;
-      }
-
-      .terminal-bar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        padding: 12px 16px;
-        background: rgba(15, 23, 42, 0.96);
-        border-bottom: 1px solid var(--line);
-      }
-
-      .left-cluster {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .traffic {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .traffic span {
-        width: 11px;
-        height: 11px;
-        border-radius: 50%;
-        display: inline-block;
-      }
-
-      .traffic span:nth-child(1) { background: #ef4444; }
-      .traffic span:nth-child(2) { background: #fbbf24; }
-      .traffic span:nth-child(3) { background: #22c55e; }
-
-      .title {
-        color: var(--cyan);
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        font-size: 11px;
-        font-weight: 700;
-      }
-
-      .actions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .action-btn {
-        border: 1px solid rgba(96, 165, 250, 0.6);
-        background: rgba(59, 130, 246, 0.08);
-        color: var(--text);
-        padding: 7px 10px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-family: inherit;
-        font-size: 12px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .action-btn:hover {
-        background: rgba(59, 130, 246, 0.12);
-      }
-
-      #output {
-        flex: 1;
-        width: 100%;
-        overflow: auto;
-        padding: 18px 18px 0;
-        background: rgba(2, 6, 15, 0.9);
-      }
-
-      .line {
-        margin: 0 0 8px;
-        white-space: pre-wrap;
-        word-break: break-word;
-        line-height: 1.7;
-      }
-
-      .ok { color: var(--green); }
-      .warn { color: var(--yellow); }
+      body { margin: 0; min-height: 100vh; background: #020817; color: #e2f5ff; }
+      .terminal-shell { min-height: 100vh; display: flex; flex-direction: column; background: #07111f; }
+      .terminal-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 16px; border-bottom: 1px solid #1f405b; background: #0d1b2f; }
+      .title { color: #22d3ee; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+      .actions { display: flex; gap: 10px; }
+      button { border: 1px solid #38bdf8; border-radius: 8px; padding: 8px 11px; color: #e0f2fe; background: #0c4a6e; font: inherit; cursor: pointer; }
+      button:hover { background: #075985; }
+      #output { flex: 1; overflow: auto; padding: 20px; white-space: pre-wrap; line-height: 1.55; }
+      .line { margin: 0 0 7px; }
+      .ok { color: #86efac; }
       .error { color: #fca5a5; }
-      .muted { color: var(--muted); }
-      .cmd { color: var(--cyan); }
-
-      .prompt-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 14px 18px 18px;
-        border-top: 1px solid var(--line);
-        background: rgba(15, 23, 42, 0.8);
-      }
-
-      .prompt {
-        color: var(--green);
-        white-space: nowrap;
-        font-weight: 700;
-      }
-
-      .input-wrap {
-        flex: 1;
-        display: flex;
-        align-items: center;
-      }
-
-      input {
-        width: 100%;
-        border: none;
-        background: transparent;
-        color: var(--text);
-        font: inherit;
-        outline: none;
-      }
-
-      button[type="submit"] {
-        border: 1px solid rgba(52, 211, 153, 0.5);
-        background: rgba(52, 211, 153, 0.08);
-        color: var(--text);
-        padding: 8px 12px;
-        border-radius: 8px;
-        cursor: pointer;
-        font: inherit;
-      }
-
-      @media (max-width: 640px) {
-        .terminal-bar {
-          flex-wrap: wrap;
-        }
-
-        .actions {
-          width: 100%;
-          justify-content: flex-end;
-        }
-      }
+      .cmd { color: #67e8f9; }
+      form { display: flex; gap: 10px; padding: 14px 16px 18px; border-top: 1px solid #1f405b; background: #0a1728; }
+      label { color: #6ee7b7; white-space: nowrap; }
+      input { min-width: 0; flex: 1; border: 0; outline: 0; color: #f8fafc; background: transparent; font: inherit; }
+      @media (max-width: 640px) { .terminal-bar { flex-wrap: wrap; } }
     </style>
   </head>
   <body>
     <main class="terminal-shell" id="terminalWindow">
       <header class="terminal-bar">
-        <div class="left-cluster">
-          <div class="traffic" aria-hidden="true">
-            <span></span><span></span><span></span>
-          </div>
-          <div class="title">KenGaming // HTML Terminal</div>
-        </div>
-
+        <span class="title">KenGaming // HTML Terminal</span>
         <div class="actions">
-          <button class="action-btn" type="button" id="backButton">Back to Arcade</button>
-          <button class="action-btn" type="button" id="fullscreenButton">Fullscreen</button>
+          <button id="backButton" type="button">BACK TO ARCADE</button>
+          <button id="fullscreenButton" type="button">FULLSCREEN</button>
         </div>
       </header>
-
       <div id="output" aria-live="polite"></div>
-
-      <form id="commandForm" class="prompt-row" autocomplete="off">
-        <label class="prompt" for="command">kg@dev:~$</label>
-        <div class="input-wrap">
-          <input id="command" type="text" spellcheck="false" autofocus />
-        </div>
-        <button type="submit">Run</button>
+      <form id="commandForm" autocomplete="off">
+        <label for="command">kg@dev:~$</label>
+        <input id="command" type="text" spellcheck="false" autofocus />
+        <button type="submit">RUN</button>
       </form>
     </main>
 
@@ -218,9 +46,8 @@
       const output = document.getElementById('output');
       const input = document.getElementById('command');
       const form = document.getElementById('commandForm');
-      const backButton = document.getElementById('backButton');
-      const fullscreenButton = document.getElementById('fullscreenButton');
       const terminalWindow = document.getElementById('terminalWindow');
+      const fullscreenButton = document.getElementById('fullscreenButton');
 
       const print = (text, className = '') => {
         const line = document.createElement('div');
@@ -230,114 +57,57 @@
         output.scrollTop = output.scrollHeight;
       };
 
+      // Resolve from this terminal document, not from the parent iframe URL.
+      // This prevents ../index.html from being resolved back to the terminal.
+      const arcadeUrl = new URL('../index.html?view=arcade#arcade', document.baseURI).href;
       const goToArcade = () => {
-        const arcadeUrl = '../index.html';
-        if (window.self !== window.top) {
-          window.top.location.href = arcadeUrl;
-          return;
+        if (window.top !== window.self) {
+          window.top.location.replace(arcadeUrl);
+        } else {
+          window.location.replace(arcadeUrl);
         }
-        window.location.href = arcadeUrl;
       };
 
-      const banner = [
-        'KenGaming HTML Terminal',
-        'Type "help" to see commands.',
-        'Use "open arcade" to return to the main site.'
-      ];
-
-      banner.forEach(line => print(line, 'ok'));
+      print('KenGaming HTML Terminal ready.', 'ok');
+      print('Type "help" for commands or use BACK TO ARCADE.');
 
       const commands = {
-        help: () => [
-          'Available commands:',
-          '  help                 Show this menu',
-          '  clear                Clear terminal output',
-          '  ls                   List available modules',
-          '  pwd                  Show current directory',
-          '  whoami               Show current user',
-          '  date                 Show current date',
-          '  echo <text>          Print text',
-          '  dotnet --version     Show .NET SDK version',
-          '  open arcade          Return to the arcade homepage',
-          '  open terminal        Stay in this terminal',
-          '  exit                 Message about browser terminal limits'
-        ].join('\n'),
+        help: () => 'help  clear  ls  pwd  whoami  date  echo <text>  open arcade  exit',
+        clear: () => { output.replaceChildren(); return ''; },
         ls: () => 'arcade/   games/   terminal/   docs/',
         pwd: () => '/workspace/ken-gaming',
         whoami: () => 'ken',
         date: () => new Date().toString(),
-        'dotnet --version': () => '8.0.100',
-        exit: () => 'This is a browser-based terminal, so it cannot quit the page itself.',
-        clear: () => {
-          output.innerHTML = '';
-          return '';
-        },
-        open: (arg) => {
-          const value = (arg || '').toLowerCase();
-          if (value === 'arcade') {
-            goToArcade();
-            return 'Opening arcade...';
-          }
-          if (value === 'terminal') {
-            return 'Already in the terminal.';
-          }
-          return 'Usage: open arcade';
-        }
+        exit: () => 'Use BACK TO ARCADE or type open arcade to leave the terminal.',
+        open: (value) => value.toLowerCase() === 'arcade' ? (goToArcade(), 'Opening arcade...') : 'Usage: open arcade'
       };
 
-      form.addEventListener('submit', (event) => {
+      form.addEventListener('submit', event => {
         event.preventDefault();
         const raw = input.value.trim();
-        if (!raw) {
-          input.focus();
-          return;
-        }
-
+        if (!raw) return;
         print(`kg@dev:~$ ${raw}`, 'cmd');
-        const [name, ...rest] = raw.split(/\s+/);
-        const value = rest.join(' ');
-        let result = '';
-
-        if (name === 'echo') {
-          result = value || '';
-        } else if (name in commands) {
-          const fn = commands[name];
-          result = typeof fn === 'function' ? fn(value) : fn;
-        } else {
-          result = `bash: ${name}: command not found`;
-          print(result, 'error');
-          input.value = '';
-          input.focus();
-          return;
-        }
-
-        if (result && result !== '') {
-          print(result, result.includes('command not found') || result.startsWith('bash:') ? 'error' : 'ok');
-        }
-
+        const [name, ...args] = raw.split(/\s+/);
+        let result;
+        if (name === 'echo') result = args.join(' ');
+        else if (name === 'dotnet' && args.join(' ') === '--version') result = '8.0.100';
+        else if (commands[name]) result = commands[name](args.join(' '));
+        else result = `bash: ${name}: command not found`;
+        if (result) print(result, result.startsWith('bash:') ? 'error' : 'ok');
         input.value = '';
         input.focus();
       });
 
-      backButton.addEventListener('click', goToArcade);
-
+      document.getElementById('backButton').addEventListener('click', goToArcade);
       fullscreenButton.addEventListener('click', async () => {
         try {
-          if (document.fullscreenElement) {
-            await document.exitFullscreen();
-          } else {
-            await terminalWindow.requestFullscreen();
-          }
-        } catch (error) {
-          print('Fullscreen is not available in this browser.', 'warn');
-        }
+          if (document.fullscreenElement) await document.exitFullscreen();
+          else await terminalWindow.requestFullscreen();
+        } catch { print('Fullscreen is not available in this browser.', 'error'); }
       });
-
       document.addEventListener('fullscreenchange', () => {
-        fullscreenButton.textContent = document.fullscreenElement ? 'Exit Fullscreen' : 'Fullscreen';
+        fullscreenButton.textContent = document.fullscreenElement ? 'EXIT FULLSCREEN' : 'FULLSCREEN';
       });
-
-      input.focus();
     </script>
   </body>
 </html>
